@@ -22,7 +22,7 @@ pip install -r requirements.txt
 
 ### Running Editor
 ```bash
-python editor/app.py
+python editor.py
 ```
 
 ### Running Game
