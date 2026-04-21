@@ -147,6 +147,9 @@ class ScrollArea:
         self.content_height = 0
         self.max_scroll = 0
         self.is_hovered = False
+        self.is_dragging = False
+        self.drag_start_y = 0
+        self.scroll_start_y = 0
 
     def set_rect(self, rect):
         self.rect = pygame.Rect(rect)
@@ -163,6 +166,33 @@ class ScrollArea:
     def handle_event(self, event):
         if event.type == pygame.MOUSEMOTION:
             self.is_hovered = self.rect.collidepoint(event.pos)
+            if self.is_dragging:
+                dy = event.pos[1] - self.drag_start_y
+                bar_h = max(20, int(self.rect.height * (self.rect.height / self.content_height)))
+                scrollable_bar_area = self.rect.height - bar_h
+                if scrollable_bar_area > 0:
+                    scroll_delta = (dy / scrollable_bar_area) * self.max_scroll
+                    self.scroll_y = max(0, min(self.scroll_start_y + scroll_delta, self.max_scroll))
+                return True
+
+        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            if self.max_scroll > 0:
+                bar_h = max(20, int(self.rect.height * (self.rect.height / self.content_height)))
+                bar_y = self.rect.y + int((self.scroll_y / self.max_scroll) * (self.rect.height - bar_h))
+                # Wider hit area for easier dragging
+                bar_rect = pygame.Rect(self.rect.right - Layout.SCROLL_BAR_WIDTH - 4, bar_y,
+                                       Layout.SCROLL_BAR_WIDTH + 8, bar_h)
+                if bar_rect.collidepoint(event.pos):
+                    self.is_dragging = True
+                    self.drag_start_y = event.pos[1]
+                    self.scroll_start_y = self.scroll_y
+                    return True
+
+        elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+            if self.is_dragging:
+                self.is_dragging = False
+                return True
+
         elif event.type == pygame.MOUSEWHEEL:
             if self.is_hovered:
                 self.scroll_y -= event.y * 24
@@ -181,7 +211,8 @@ class ScrollArea:
             bar_y = self.rect.y + int((self.scroll_y / self.max_scroll) * (self.rect.height - bar_h))
             bar_rect = pygame.Rect(self.rect.right - Layout.SCROLL_BAR_WIDTH, bar_y,
                                    Layout.SCROLL_BAR_WIDTH, bar_h)
-            pygame.draw.rect(surface, Colors.SURFACE_HOVER, bar_rect, border_radius=3)
+            color = Colors.ACCENT if self.is_dragging else Colors.SURFACE_HOVER
+            pygame.draw.rect(surface, color, bar_rect, border_radius=3)
 
 
 class Separator:

@@ -124,7 +124,7 @@ class EditorApp:
 
             if event.type in (pygame.MOUSEBUTTONDOWN, pygame.MOUSEMOTION, pygame.MOUSEBUTTONUP):
                 pos = event.pos
-                if pos[0] < Layout.LEFT_PANEL_WIDTH:
+                if self.asset_panel.scroll.is_dragging or pos[0] < Layout.LEFT_PANEL_WIDTH:
                     self.asset_panel.handle_event(event)
                 elif pos[0] > self.window_width - Layout.RIGHT_PANEL_WIDTH:
                     self.properties_panel.handle_event(event)

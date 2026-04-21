@@ -35,6 +35,588 @@
           "row": 8,
           "asset": "assets/players/player.png",
           "walkable": false
+        },
+        {
+          "col": 7,
+          "row": 9,
+          "asset": "assets/Tiles/FieldsTile_01.png",
+          "walkable": false
+        },
+        {
+          "col": 8,
+          "row": 9,
+          "asset": "assets/Tiles/FieldsTile_05.png",
+          "walkable": false
+        },
+        {
+          "col": 8,
+          "row": 10,
+          "asset": "assets/Tiles/FieldsTile_05.png",
+          "walkable": false
+        },
+        {
+          "col": 8,
+          "row": 11,
+          "asset": "assets/Tiles/FieldsTile_38.png",
+          "walkable": false
+        },
+        {
+          "col": 9,
+          "row": 11,
+          "asset": "assets/Tiles/FieldsTile_38.png",
+          "walkable": false
+        },
+        {
+          "col": 9,
+          "row": 10,
+          "asset": "assets/Tiles/FieldsTile_05.png",
+          "walkable": false
+        },
+        {
+          "col": 9,
+          "row": 12,
+          "asset": "assets/Tiles/FieldsTile_10.png",
+          "walkable": false
+        },
+        {
+          "col": 8,
+          "row": 12,
+          "asset": "assets/Tiles/FieldsTile_19.png",
+          "walkable": false
+        },
+        {
+          "col": 10,
+          "row": 12,
+          "asset": "assets/Tiles/FieldsTile_38.png",
+          "walkable": false
+        },
+        {
+          "col": 11,
+          "row": 12,
+          "asset": "assets/Tiles/FieldsTile_38.png",
+          "walkable": false
+        },
+        {
+          "col": 12,
+          "row": 12,
+          "asset": "assets/Tiles/FieldsTile_26.png",
+          "walkable": false
+        },
+        {
+          "col": 13,
+          "row": 12,
+          "asset": "assets/Tiles/FieldsTile_26.png",
+          "walkable": false
+        },
+        {
+          "col": 14,
+          "row": 12,
+          "asset": "assets/Tiles/FieldsTile_26.png",
+          "walkable": false
+        },
+        {
+          "col": 15,
+          "row": 12,
+          "asset": "assets/Tiles/FieldsTile_26.png",
+          "walkable": false
+        },
+        {
+          "col": 16,
+          "row": 12,
+          "asset": "assets/Tiles/FieldsTile_26.png",
+          "walkable": false
+        },
+        {
+          "col": 17,
+          "row": 12,
+          "asset": "assets/Tiles/FieldsTile_26.png",
+          "walkable": false
+        },
+        {
+          "col": 18,
+          "row": 11,
+          "asset": "assets/Tiles/FieldsTile_14.png",
+          "walkable": false
+        },
+        {
+          "col": 11,
+          "row": 11,
+          "asset": "assets/Tiles/FieldsTile_14.png",
+          "walkable": false
+        },
+        {
+          "col": 12,
+          "row": 11,
+          "asset": "assets/Tiles/FieldsTile_14.png",
+          "walkable": false
+        },
+        {
+          "col": 13,
+          "row": 11,
+          "asset": "assets/Tiles/FieldsTile_14.png",
+          "walkable": false
+        },
+        {
+          "col": 15,
+          "row": 11,
+          "asset": "assets/Tiles/FieldsTile_14.png",
+          "walkable": false
+        },
+        {
+          "col": 16,
+          "row": 11,
+          "asset": "assets/Tiles/FieldsTile_14.png",
+          "walkable": false
+        },
+        {
+          "col": 17,
+          "row": 11,
+          "asset": "assets/Tiles/FieldsTile_14.png",
+          "walkable": false
+        },
+        {
+          "col": 14,
+          "row": 11,
+          "asset": "assets/Tiles/FieldsTile_14.png",
+          "walkable": false
+        },
+        {
+          "col": 10,
+          "row": 11,
+          "asset": "assets/Tiles/FieldsTile_38.png",
+          "walkable": false
+        },
+        {
+          "col": 8,
+          "row": 13,
+          "asset": "assets/Tiles/FieldsTile_25.png",
+          "walkable": false
+        },
+        {
+          "col": 9,
+          "row": 13,
+          "asset": "assets/Tiles/FieldsTile_25.png",
+          "walkable": false
+        },
+        {
+          "col": 10,
+          "row": 13,
+          "asset": "assets/Tiles/FieldsTile_25.png",
+          "walkable": false
+        },
+        {
+          "col": 11,
+          "row": 13,
+          "asset": "assets/Tiles/FieldsTile_38.png",
+          "walkable": false
+        },
+        {
+          "col": 12,
+          "row": 13,
+          "asset": "assets/Tiles/FieldsTile_38.png",
+          "walkable": false
+        },
+        {
+          "col": 13,
+          "row": 13,
+          "asset": "assets/Tiles/FieldsTile_38.png",
+          "walkable": false
+        },
+        {
+          "col": 14,
+          "row": 13,
+          "asset": "assets/Tiles/FieldsTile_38.png",
+          "walkable": false
+        },
+        {
+          "col": 15,
+          "row": 13,
+          "asset": "assets/Tiles/FieldsTile_38.png",
+          "walkable": false
+        },
+        {
+          "col": 16,
+          "row": 13,
+          "asset": "assets/Tiles/FieldsTile_38.png",
+          "walkable": false
+        },
+        {
+          "col": 17,
+          "row": 13,
+          "asset": "assets/Tiles/FieldsTile_38.png",
+          "walkable": false
+        },
+        {
+          "col": 8,
+          "row": 14,
+          "asset": "assets/Tiles/FieldsTilesetTest.png",
+          "walkable": false
+        },
+        {
+          "col": 7,
+          "row": 10,
+          "asset": "assets/Tiles/FieldsTile_63.png",
+          "walkable": false
+        },
+        {
+          "col": 7,
+          "row": 11,
+          "asset": "assets/Tiles/FieldsTile_63.png",
+          "walkable": false
+        },
+        {
+          "col": 7,
+          "row": 12,
+          "asset": "assets/Tiles/FieldsTile_63.png",
+          "walkable": false
+        },
+        {
+          "col": 7,
+          "row": 13,
+          "asset": "assets/Tiles/FieldsTile_63.png",
+          "walkable": false
+        },
+        {
+          "col": 7,
+          "row": 14,
+          "asset": "assets/Tiles/FieldsTile_63.png",
+          "walkable": false
+        },
+        {
+          "col": 5,
+          "row": 15,
+          "asset": "assets/Tiles/FieldsTile_59.png",
+          "walkable": false
+        },
+        {
+          "col": 6,
+          "row": 15,
+          "asset": "assets/Tiles/FieldsTile_59.png",
+          "walkable": false
+        },
+        {
+          "col": 7,
+          "row": 15,
+          "asset": "assets/Tiles/FieldsTile_59.png",
+          "walkable": false
+        },
+        {
+          "col": 8,
+          "row": 15,
+          "asset": "assets/Tiles/FieldsTile_59.png",
+          "walkable": false
+        },
+        {
+          "col": 10,
+          "row": 15,
+          "asset": "assets/Tiles/FieldsTile_59.png",
+          "walkable": false
+        },
+        {
+          "col": 12,
+          "row": 15,
+          "asset": "assets/Tiles/FieldsTile_59.png",
+          "walkable": false
+        },
+        {
+          "col": 14,
+          "row": 15,
+          "asset": "assets/Tiles/FieldsTile_59.png",
+          "walkable": false
+        },
+        {
+          "col": 16,
+          "row": 15,
+          "asset": "assets/Tiles/FieldsTile_59.png",
+          "walkable": false
+        },
+        {
+          "col": 17,
+          "row": 15,
+          "asset": "assets/Tiles/FieldsTile_59.png",
+          "walkable": false
+        },
+        {
+          "col": 18,
+          "row": 15,
+          "asset": "assets/Tiles/FieldsTile_59.png",
+          "walkable": false
+        },
+        {
+          "col": 19,
+          "row": 15,
+          "asset": "assets/Tiles/FieldsTile_59.png",
+          "walkable": false
+        },
+        {
+          "col": 20,
+          "row": 15,
+          "asset": "assets/Tiles/FieldsTile_59.png",
+          "walkable": false
+        },
+        {
+          "col": 9,
+          "row": 14,
+          "asset": "assets/Tiles/FieldsTile_38.png",
+          "walkable": false
+        },
+        {
+          "col": 10,
+          "row": 14,
+          "asset": "assets/Tiles/FieldsTile_38.png",
+          "walkable": false
+        },
+        {
+          "col": 11,
+          "row": 14,
+          "asset": "assets/Tiles/FieldsTile_38.png",
+          "walkable": false
+        },
+        {
+          "col": 13,
+          "row": 14,
+          "asset": "assets/Tiles/FieldsTile_38.png",
+          "walkable": false
+        },
+        {
+          "col": 14,
+          "row": 14,
+          "asset": "assets/Tiles/FieldsTile_38.png",
+          "walkable": false
+        },
+        {
+          "col": 15,
+          "row": 14,
+          "asset": "assets/Tiles/FieldsTile_38.png",
+          "walkable": false
+        },
+        {
+          "col": 16,
+          "row": 14,
+          "asset": "assets/Tiles/FieldsTile_38.png",
+          "walkable": false
+        },
+        {
+          "col": 17,
+          "row": 14,
+          "asset": "assets/Tiles/FieldsTile_38.png",
+          "walkable": false
+        },
+        {
+          "col": 18,
+          "row": 14,
+          "asset": "assets/Tiles/FieldsTile_38.png",
+          "walkable": false
+        },
+        {
+          "col": 2,
+          "row": 18,
+          "asset": "assets/Tiles/FieldsTile_49.png",
+          "walkable": false
+        },
+        {
+          "col": 3,
+          "row": 18,
+          "asset": "assets/Tiles/FieldsTile_49.png",
+          "walkable": false
+        },
+        {
+          "col": 4,
+          "row": 18,
+          "asset": "assets/Tiles/FieldsTile_49.png",
+          "walkable": false
+        },
+        {
+          "col": 6,
+          "row": 18,
+          "asset": "assets/Tiles/FieldsTile_49.png",
+          "walkable": false
+        },
+        {
+          "col": 8,
+          "row": 19,
+          "asset": "assets/Tiles/FieldsTile_49.png",
+          "walkable": false
+        },
+        {
+          "col": 10,
+          "row": 19,
+          "asset": "assets/Tiles/FieldsTile_49.png",
+          "walkable": false
+        },
+        {
+          "col": 12,
+          "row": 20,
+          "asset": "assets/Tiles/FieldsTile_49.png",
+          "walkable": false
+        },
+        {
+          "col": 14,
+          "row": 20,
+          "asset": "assets/Tiles/FieldsTile_49.png",
+          "walkable": false
+        },
+        {
+          "col": 16,
+          "row": 20,
+          "asset": "assets/Tiles/FieldsTile_49.png",
+          "walkable": false
+        },
+        {
+          "col": 17,
+          "row": 21,
+          "asset": "assets/Tiles/FieldsTile_49.png",
+          "walkable": false
+        },
+        {
+          "col": 18,
+          "row": 21,
+          "asset": "assets/Tiles/FieldsTile_49.png",
+          "walkable": false
+        },
+        {
+          "col": 19,
+          "row": 21,
+          "asset": "assets/Tiles/FieldsTile_49.png",
+          "walkable": false
+        },
+        {
+          "col": 20,
+          "row": 21,
+          "asset": "assets/Tiles/FieldsTile_49.png",
+          "walkable": false
+        },
+        {
+          "col": 21,
+          "row": 21,
+          "asset": "assets/Tiles/FieldsTile_49.png",
+          "walkable": false
+        },
+        {
+          "col": 22,
+          "row": 21,
+          "asset": "assets/Tiles/FieldsTile_49.png",
+          "walkable": false
+        },
+        {
+          "col": 22,
+          "row": 22,
+          "asset": "assets/Tiles/FieldsTile_49.png",
+          "walkable": false
+        },
+        {
+          "col": 21,
+          "row": 22,
+          "asset": "assets/Tiles/FieldsTile_49.png",
+          "walkable": false
+        },
+        {
+          "col": 21,
+          "row": 23,
+          "asset": "assets/Tiles/FieldsTile_49.png",
+          "walkable": false
+        },
+        {
+          "col": 20,
+          "row": 23,
+          "asset": "assets/Tiles/FieldsTile_49.png",
+          "walkable": false
+        },
+        {
+          "col": 19,
+          "row": 23,
+          "asset": "assets/Tiles/FieldsTile_49.png",
+          "walkable": false
+        },
+        {
+          "col": 18,
+          "row": 23,
+          "asset": "assets/Tiles/FieldsTile_49.png",
+          "walkable": false
+        },
+        {
+          "col": 17,
+          "row": 23,
+          "asset": "assets/Tiles/FieldsTile_49.png",
+          "walkable": false
+        },
+        {
+          "col": 16,
+          "row": 22,
+          "asset": "assets/Tiles/FieldsTile_49.png",
+          "walkable": false
+        },
+        {
+          "col": 15,
+          "row": 22,
+          "asset": "assets/Tiles/FieldsTile_49.png",
+          "walkable": false
+        },
+        {
+          "col": 14,
+          "row": 21,
+          "asset": "assets/Tiles/FieldsTile_49.png",
+          "walkable": false
+        },
+        {
+          "col": 13,
+          "row": 21,
+          "asset": "assets/Tiles/FieldsTile_49.png",
+          "walkable": false
+        },
+        {
+          "col": 13,
+          "row": 20,
+          "asset": "assets/Tiles/FieldsTile_49.png",
+          "walkable": false
+        },
+        {
+          "col": 11,
+          "row": 20,
+          "asset": "assets/Tiles/FieldsTile_49.png",
+          "walkable": false
+        },
+        {
+          "col": 9,
+          "row": 20,
+          "asset": "assets/Tiles/FieldsTile_49.png",
+          "walkable": false
+        },
+        {
+          "col": 7,
+          "row": 20,
+          "asset": "assets/Tiles/FieldsTile_49.png",
+          "walkable": false
+        },
+        {
+          "col": 6,
+          "row": 20,
+          "asset": "assets/Tiles/FieldsTile_49.png",
+          "walkable": false
+        },
+        {
+          "col": 6,
+          "row": 19,
+          "asset": "assets/Tiles/FieldsTile_49.png",
+          "walkable": false
+        },
+        {
+          "col": 5,
+          "row": 19,
+          "asset": "assets/Tiles/FieldsTile_49.png",
+          "walkable": false
+        },
+        {
+          "col": 5,
+          "row": 18,
+          "asset": "assets/Tiles/FieldsTile_49.png",
+          "walkable": false
+        },
+        {
+          "col": 5,
+          "row": 17,
+          "asset": "assets/Tiles/FieldsTile_49.png",
+          "walkable": false
         }
       ]
     },
@@ -42,19 +624,94 @@
       "name": "Objects",
       "visible": true,
       "locked": false,
-      "tiles": []
+      "tiles": [
+        {
+          "col": 21,
+          "row": 4,
+          "asset": "assets/Tiles/FieldsTile_53.png",
+          "walkable": false
+        },
+        {
+          "col": 21,
+          "row": 5,
+          "asset": "assets/Tiles/FieldsTile_53.png",
+          "walkable": false
+        },
+        {
+          "col": 22,
+          "row": 5,
+          "asset": "assets/Tiles/FieldsTile_53.png",
+          "walkable": false
+        },
+        {
+          "col": 22,
+          "row": 4,
+          "asset": "assets/Tiles/FieldsTile_53.png",
+          "walkable": false
+        }
+      ]
     },
     {
       "name": "Collision",
       "visible": true,
       "locked": false,
-      "tiles": []
+      "tiles": [
+        {
+          "col": 3,
+          "row": 5,
+          "asset": "assets/Tiles/FieldsTile_53.png",
+          "walkable": false
+        },
+        {
+          "col": 2,
+          "row": 5,
+          "asset": "assets/Tiles/FieldsTile_53.png",
+          "walkable": false
+        },
+        {
+          "col": 2,
+          "row": 6,
+          "asset": "assets/Tiles/FieldsTile_53.png",
+          "walkable": false
+        },
+        {
+          "col": 3,
+          "row": 6,
+          "asset": "assets/Tiles/FieldsTile_53.png",
+          "walkable": false
+        }
+      ]
     },
     {
       "name": "Decoration",
       "visible": true,
       "locked": false,
-      "tiles": []
+      "tiles": [
+        {
+          "col": 14,
+          "row": 3,
+          "asset": "assets/Tiles/FieldsTile_38.png",
+          "walkable": false
+        },
+        {
+          "col": 14,
+          "row": 4,
+          "asset": "assets/Tiles/FieldsTile_38.png",
+          "walkable": false
+        },
+        {
+          "col": 15,
+          "row": 4,
+          "asset": "assets/Tiles/FieldsTile_38.png",
+          "walkable": false
+        },
+        {
+          "col": 15,
+          "row": 3,
+          "asset": "assets/Tiles/FieldsTile_38.png",
+          "walkable": false
+        }
+      ]
     }
   ]
 }
