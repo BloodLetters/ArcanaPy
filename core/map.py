@@ -1,12 +1,20 @@
+"""
+Map data for game runtime.
+Supports both old flat format and new layered format (via LayerManager).
+For game runtime, loads all layers and merges them for rendering/collision.
+"""
 import pygame
 import json
 import os
 from core.settings import TILE_SIZE, WALL_COLOR, MAP_WIDTH, WINDOW_HEIGHT, LEFT_UI_WIDTH
 from core.grid import get_pixel_pos
 
+
 class MapData:
+    """Game-compatible map data. Loads layered or legacy formats into a flat tile dict."""
+
     def __init__(self):
-        self.tiles = {} # {(col, row): {"asset": asset_path, "walkable": bool}}
+        self.tiles = {}  # {(col, row): {"asset": asset_path, "walkable": bool}}
         self.image_cache = {}
 
     def get_image(self, asset_path):
@@ -38,12 +46,12 @@ class MapData:
     def draw(self, surface, camera_x=0, camera_y=0, map_width=None, window_height=None):
         mw = map_width if map_width is not None else MAP_WIDTH
         wh = window_height if window_height is not None else WINDOW_HEIGHT
-        
+
         for (col, row), data in self.tiles.items():
             world_x, world_y = get_pixel_pos((col, row))
             screen_x = world_x - camera_x + LEFT_UI_WIDTH
             screen_y = world_y - camera_y
-            
+
             # Optimization: only draw if visible on screen
             if LEFT_UI_WIDTH - TILE_SIZE < screen_x < LEFT_UI_WIDTH + mw and -TILE_SIZE < screen_y < wh:
                 asset_path = data["asset"]
@@ -60,24 +68,39 @@ class MapData:
 
     def save(self, filepath):
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
-        tiles_list = [{"col": k[0], "row": k[1], "asset": v["asset"], "walkable": v["walkable"]} for k, v in self.tiles.items()]
+        tiles_list = [{"col": k[0], "row": k[1], "asset": v["asset"], "walkable": v["walkable"]}
+                      for k, v in self.tiles.items()]
         with open(filepath, 'w') as f:
             json.dump({'tiles': tiles_list}, f)
         print(f"Map saved to {filepath}")
 
     def load(self, filepath):
+        """Load map file. Supports old flat format and new layered format."""
         self.tiles.clear()
-        if os.path.exists(filepath):
-            with open(filepath, 'r') as f:
-                data = json.load(f)
-                if 'walls' in data:
-                    for w in data['walls']:
-                        self.tiles[(w[0], w[1])] = {"asset": "COLOR", "walkable": False}
-                elif 'tiles' in data:
-                    for t in data['tiles']:
-                        # Backward compatibility for old format missing "walkable"
-                        walkable = t.get("walkable", False)
-                        self.tiles[(t['col'], t['row'])] = {"asset": t['asset'], "walkable": walkable}
-            print(f"Map loaded from {filepath}")
-        else:
+        if not os.path.exists(filepath):
             print(f"Map file {filepath} not found, starting with empty map.")
+            return
+
+        with open(filepath, 'r') as f:
+            data = json.load(f)
+
+        # New layered format (version 2) — flatten all layers for game
+        if "version" in data and data["version"] >= 2:
+            for layer_data in data.get("layers", []):
+                if not layer_data.get("visible", True):
+                    continue
+                for t in layer_data.get("tiles", []):
+                    walkable = t.get("walkable", False)
+                    self.tiles[(t['col'], t['row'])] = {"asset": t['asset'], "walkable": walkable}
+            print(f"Layered map loaded from {filepath} (flattened for game)")
+            return
+
+        # Legacy formats
+        if 'walls' in data:
+            for w in data['walls']:
+                self.tiles[(w[0], w[1])] = {"asset": "COLOR", "walkable": False}
+        elif 'tiles' in data:
+            for t in data['tiles']:
+                walkable = t.get("walkable", False)
+                self.tiles[(t['col'], t['row'])] = {"asset": t['asset'], "walkable": walkable}
+        print(f"Map loaded from {filepath}")

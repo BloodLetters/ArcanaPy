@@ -6,14 +6,12 @@ def draw_grid(surface, camera_x=0, camera_y=0, map_width=None, window_height=Non
     mw = map_width if map_width is not None else MAP_WIDTH
     wh = window_height if window_height is not None else WINDOW_HEIGHT
     
-    # Vertical lines
     start_x = -(camera_x % TILE_SIZE)
     for x in range(start_x, mw + 1, TILE_SIZE):
         screen_x = x + LEFT_UI_WIDTH
         if LEFT_UI_WIDTH <= screen_x <= LEFT_UI_WIDTH + mw:
             pygame.draw.line(surface, GRID_COLOR, (screen_x, 0), (screen_x, wh))
             
-    # Horizontal lines
     start_y = -(camera_y % TILE_SIZE)
     for y in range(start_y, wh + 1, TILE_SIZE):
         if y >= 0:

@@ -9,15 +9,16 @@ class Game:
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-        pygame.display.set_caption("Grid Base Game")
+        pygame.display.set_caption("ArcanaPy")
         self.clock = pygame.time.Clock()
         self.running = True
+
+        self.icon = pygame.image.load("preview/images/icon-379x300.png")
+        pygame.display.set_icon(self.icon)
         
         self.map_data = MapData()
         self.map_data.load(MAP_FILE)
-        
-        # Initialize entities
-        # Start player in the middle of the screen
+    
         start_col = (WINDOW_WIDTH // 2) // TILE_SIZE
         start_row = (WINDOW_HEIGHT // 2) // TILE_SIZE
         self.player = Player(start_col, start_row, self.map_data)

@@ -1,0 +1,60 @@
+{
+  "version": 2,
+  "layers": [
+    {
+      "name": "Background",
+      "visible": true,
+      "locked": false,
+      "tiles": [
+        {
+          "col": 7,
+          "row": 8,
+          "asset": "assets/players/player.png",
+          "walkable": false
+        },
+        {
+          "col": 8,
+          "row": 8,
+          "asset": "assets/players/player.png",
+          "walkable": false
+        },
+        {
+          "col": 9,
+          "row": 8,
+          "asset": "assets/players/player.png",
+          "walkable": false
+        },
+        {
+          "col": 10,
+          "row": 8,
+          "asset": "assets/players/player.png",
+          "walkable": false
+        },
+        {
+          "col": 11,
+          "row": 8,
+          "asset": "assets/players/player.png",
+          "walkable": false
+        }
+      ]
+    },
+    {
+      "name": "Objects",
+      "visible": true,
+      "locked": false,
+      "tiles": []
+    },
+    {
+      "name": "Collision",
+      "visible": true,
+      "locked": false,
+      "tiles": []
+    },
+    {
+      "name": "Decoration",
+      "visible": true,
+      "locked": false,
+      "tiles": []
+    }
+  ]
+}

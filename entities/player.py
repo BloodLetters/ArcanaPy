@@ -10,12 +10,11 @@ class Player:
         self.pixel_pos = list(get_pixel_pos(self.grid_pos))
         self.target_grid_pos = None
         self.path = []
-        self.speed = 200  # pixels per second
+        self.speed = 200
         self.animation_timer = 0.0
         self.facing_right = True
         self.map_data = map_data
 
-        # Load player image
         try:
             self.image = pygame.image.load("assets/player/player.png").convert_alpha()
         except (pygame.error, FileNotFoundError):
@@ -23,12 +22,10 @@ class Player:
             print("Warning: assets/player/player.png not found, using fallback color.")
 
     def set_target(self, col, row):
-        """Sets the target grid position for the player to move towards."""
         self.target_grid_pos = (col, row)
         self.calculate_astar_path()
 
     def calculate_astar_path(self):
-        """Calculates path using A* algorithm to avoid walls."""
         if not self.target_grid_pos:
             return
 
@@ -62,12 +59,10 @@ class Player:
                 new_cost = cost_so_far[current] + 1
                 if next_node not in cost_so_far or new_cost < cost_so_far[next_node]:
                     cost_so_far[next_node] = new_cost
-                    # Heuristic: Manhattan distance
                     priority = new_cost + abs(goal[0] - next_node[0]) + abs(goal[1] - next_node[1])
                     heapq.heappush(frontier, (priority, next_node))
                     came_from[next_node] = current
 
-        # Reconstruct path
         self.path = []
         if goal in came_from:
             current = goal
@@ -77,9 +72,8 @@ class Player:
             self.path.reverse()
 
     def update(self, dt):
-        """Updates the player's position."""
         if not self.path and self.target_grid_pos:
-            self.target_grid_pos = None # Reached target
+            self.target_grid_pos = None
             self.animation_timer = 0.0
             return
 
@@ -88,7 +82,6 @@ class Player:
             next_grid_pos = self.path[0]
             target_x, target_y = get_pixel_pos(next_grid_pos)
 
-            # Move towards target pixel position
             move_dist = self.speed * dt
             
             dx = target_x - self.pixel_pos[0]
@@ -102,52 +95,41 @@ class Player:
             dist = (dx**2 + dy**2)**0.5
 
             if dist <= move_dist:
-                # Reached the next grid cell
                 self.pixel_pos[0] = target_x
                 self.pixel_pos[1] = target_y
                 self.grid_pos = next_grid_pos
                 self.path.pop(0)
             else:
-                # Move a fraction of the distance
                 self.pixel_pos[0] += (dx / dist) * move_dist
                 self.pixel_pos[1] += (dy / dist) * move_dist
 
     def draw(self, surface):
-        """Draws the player and the target path."""
-        # Draw target indicator if exists
         if self.target_grid_pos:
             tx, ty = get_pixel_pos(self.target_grid_pos)
             target_rect = pygame.Rect(tx, ty, TILE_SIZE, TILE_SIZE)
             pygame.draw.rect(surface, TARGET_COLOR, target_rect, 2)
             
-            # Draw path
             for p in self.path:
                 px, py = get_pixel_pos(p)
                 p_rect = pygame.Rect(px + TILE_SIZE//2 - 2, py + TILE_SIZE//2 - 2, 4, 4)
                 pygame.draw.rect(surface, TARGET_COLOR, p_rect)
 
-        # Draw player
         if getattr(self, 'image', None):
             image_to_draw = self.image
             if not getattr(self, 'facing_right', True):
                 image_to_draw = pygame.transform.flip(self.image, True, False)
                 
-            # Base center on the tile
             center_x = self.pixel_pos[0] + TILE_SIZE / 2
             center_y = self.pixel_pos[1] + TILE_SIZE / 2
                 
-            # Add animations if moving
             if getattr(self, 'path', []):
                 anim_timer = getattr(self, 'animation_timer', 0)
-                # Bobbing animation
                 bob_offset = abs(math.sin(anim_timer * 15)) * 8
                 center_y -= bob_offset
                 
-                # Swing (rotation) animation
                 swing_angle = math.sin(anim_timer * 15) * 5 # Swing up to 15 degrees
                 image_to_draw = pygame.transform.rotate(image_to_draw, swing_angle)
 
-            # Draw image centered correctly
             draw_rect = image_to_draw.get_rect(center=(center_x, center_y))
             surface.blit(image_to_draw, draw_rect)
         else:
