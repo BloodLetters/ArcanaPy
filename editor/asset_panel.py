@@ -20,6 +20,15 @@ class AssetPanel:
             return
 
         for root, dirs, files in os.walk(assets_dir):
+            # Exclude specific directories
+            if root == assets_dir:
+                if 'players' in dirs:
+                    dirs.remove('Players')
+                if 'enemies' in dirs:
+                    dirs.remove('Enemies')
+                if 'effect' in dirs:
+                    dirs.remove('Effects')
+
             rel = os.path.relpath(root, assets_dir)
             category = rel.replace("\\", "/")
             if category == ".":

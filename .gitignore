@@ -1,1 +1,4 @@
 assets/
+editor/__pycache__
+core/__pycache__
+__pycache__

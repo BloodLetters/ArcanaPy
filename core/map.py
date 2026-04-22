@@ -6,7 +6,7 @@ For game runtime, loads all layers and merges them for rendering/collision.
 import pygame
 import json
 import os
-from core.settings import TILE_SIZE, WALL_COLOR, MAP_WIDTH, WINDOW_HEIGHT, LEFT_UI_WIDTH
+from core.settings import TILE_SIZE, WALL_COLOR
 from core.grid import get_pixel_pos
 from core.script_manager import ScriptRuntime
 
@@ -47,17 +47,19 @@ class MapData:
             return not self.tiles[(col, row)]["walkable"]
         return False
 
-    def draw(self, surface, camera_x=0, camera_y=0, map_width=None, window_height=None):
-        mw = map_width if map_width is not None else MAP_WIDTH
-        wh = window_height if window_height is not None else WINDOW_HEIGHT
+    def draw(self, surface, camera_x=0, camera_y=0, window_width=None, window_height=None):
+        if window_width is None:
+            window_width = surface.get_width()
+        if window_height is None:
+            window_height = surface.get_height()
 
         for (col, row), data in self.tiles.items():
             world_x, world_y = get_pixel_pos((col, row))
-            screen_x = world_x - camera_x + LEFT_UI_WIDTH
+            screen_x = world_x - camera_x
             screen_y = world_y - camera_y
 
             # Optimization: only draw if visible on screen
-            if LEFT_UI_WIDTH - TILE_SIZE < screen_x < LEFT_UI_WIDTH + mw and -TILE_SIZE < screen_y < wh:
+            if -TILE_SIZE < screen_x < window_width and -TILE_SIZE < screen_y < window_height:
                 asset_path = data["asset"]
                 if asset_path == "COLOR":
                     wall_rect = pygame.Rect(screen_x, screen_y, TILE_SIZE, TILE_SIZE)

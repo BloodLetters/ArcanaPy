@@ -28,3 +28,14 @@ TARGET_COLOR = (50, 200, 50)
 WALL_COLOR = (120, 120, 120)
 
 MAP_FILE = "maps/world.json"
+
+ENEMY_SPAWN_DISTANCE = 16
+
+ENEMIES_CONFIG = {
+    "enemy_1": {
+        "asset": "assets/Enemies/enemy-1.png",
+        "health": 100,
+        "damage": 10,
+        "speed": 180
+    }
+}

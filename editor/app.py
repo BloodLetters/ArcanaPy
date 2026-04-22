@@ -10,7 +10,6 @@ from editor.toolbar import Toolbar
 from editor.asset_panel import AssetPanel
 from editor.properties_panel import PropertiesPanel
 from editor.canvas import Canvas
-from editor.script_panel import ScriptPanel
 
 
 class EditorApp:
@@ -49,7 +48,6 @@ class EditorApp:
         self.asset_panel = AssetPanel(self)
         self.properties_panel = PropertiesPanel(self)
         self.canvas = Canvas(self)
-        self.script_panel = ScriptPanel(self)
 
         self.asset_panel.load_assets()
         all_assets = self.asset_panel.get_all_assets()
@@ -67,14 +65,6 @@ class EditorApp:
         self.asset_panel.recalculate(h)
         self.properties_panel.recalculate(w, h)
         self.canvas.recalculate(w, h)
-
-        right_panel_h = h - Layout.TOOLBAR_HEIGHT
-        script_panel_y = Layout.TOOLBAR_HEIGHT + int(right_panel_h * 0.58)
-        self.script_panel.recalculate(
-            w - Layout.RIGHT_PANEL_WIDTH,
-            script_panel_y,
-            Layout.RIGHT_PANEL_WIDTH,
-        )
 
     def set_tool(self, tool_id):
         self.current_tool = tool_id
@@ -140,8 +130,6 @@ class EditorApp:
                     continue
 
             if event.type == pygame.KEYDOWN:
-                if self.script_panel.handle_event(event):
-                    continue
                 self._handle_key(event)
                 continue
 
@@ -151,7 +139,6 @@ class EditorApp:
                     self.asset_panel.handle_event(event)
                 elif pos[0] > self.window_width - Layout.RIGHT_PANEL_WIDTH:
                     self.properties_panel.handle_event(event)
-                    self.script_panel.handle_event(event)
                 else:
                     self.canvas.handle_event(event)
             elif event.type == pygame.MOUSEWHEEL:
@@ -204,7 +191,6 @@ class EditorApp:
         dt = 1 / FPS
         keys = pygame.key.get_pressed()
         self.camera.update_keys(keys)
-        self.script_panel.update(dt)
         self.toolbar.update(dt)
 
     def draw(self):
@@ -213,7 +199,6 @@ class EditorApp:
         self.canvas.draw(self.screen)
         self.asset_panel.draw(self.screen)
         self.properties_panel.draw(self.screen)
-        self.script_panel.draw(self.screen)
         self.toolbar.draw(self.screen)
 
         if self.context_menu:

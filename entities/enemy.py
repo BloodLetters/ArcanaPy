@@ -1,46 +1,36 @@
 import pygame
 import math
 import heapq
-from core.settings import TILE_SIZE, PLAYER_COLOR, TARGET_COLOR
+from core.settings import TILE_SIZE, ENEMIES_CONFIG
 from core.grid import get_pixel_pos
 
-class Player:
-    def __init__(self, start_col, start_row, map_data):
+class Enemy:
+    def __init__(self, enemy_type, start_col, start_row, map_data):
         self.grid_pos = (start_col, start_row)
         self.pixel_pos = list(get_pixel_pos(self.grid_pos))
         self.target_grid_pos = None
-        self.path = []
-        self.speed = 200
-        self.animation_timer = 0.0
-        self.facing_right = True
         self.map_data = map_data
-        self.on_step_callback = None
-        self.is_occupied_callback = None
+        
+        config = ENEMIES_CONFIG.get(enemy_type, {})
+        self.health = config.get("health", 100)
+        self.damage = config.get("damage", 10)
+        self.speed = config.get("speed", 180)
+        asset_path = config.get("asset", "")
 
         try:
-            self.image = pygame.image.load("assets/Players/player.png").convert_alpha()
+            self.image = pygame.image.load(asset_path).convert_alpha()
         except (pygame.error, FileNotFoundError):
             self.image = None
-            print("Warning: assets/Players/player.png not found, using fallback color.")
+            print(f"Warning: Enemy image {asset_path} not found.")
 
-    def set_target(self, col, row):
-        self.target_grid_pos = (col, row)
-        self.calculate_astar_path()
+        self.animation_timer = 0.0
+        self.facing_right = True
 
-    def calculate_astar_path(self):
-        if not self.target_grid_pos:
-            return
-
+    def calculate_astar_path(self, goal):
         start = self.grid_pos
-        goal = self.target_grid_pos
         
-        if self.map_data.is_wall(*goal):
-            self.path = []
-            return
-            
-        if self.is_occupied_callback and self.is_occupied_callback(*goal):
-            self.path = []
-            return
+        if start == goal:
+            return []
 
         frontier = []
         heapq.heappush(frontier, (0, start))
@@ -55,7 +45,6 @@ class Player:
         else:
             min_col, max_col, min_row, max_row = -100, 100, -100, 100
 
-        # Ensure start and goal are within the search bounds
         min_col = min(min_col, start[0] - 5, goal[0] - 5)
         max_col = max(max_col, start[0] + 5, goal[0] + 5)
         min_row = min(min_row, start[1] - 5, goal[1] - 5)
@@ -73,10 +62,8 @@ class Player:
                 if not (min_col <= next_node[0] <= max_col and min_row <= next_node[1] <= max_row):
                     continue
                     
-                if self.map_data.is_wall(*next_node):
-                    continue
-
-                if self.is_occupied_callback and self.is_occupied_callback(*next_node):
+                # The enemy can enter the goal even if it is a wall (because the goal is the player's position)
+                if next_node != goal and self.map_data.is_wall(*next_node):
                     continue
 
                 new_cost = cost_so_far[current] + 1
@@ -86,24 +73,35 @@ class Player:
                     heapq.heappush(frontier, (priority, next_node))
                     came_from[next_node] = current
 
-        self.path = []
+        path = []
         if goal in came_from:
             current = goal
             while current != start:
-                self.path.append(current)
+                path.append(current)
                 current = came_from[current]
-            self.path.reverse()
+            path.reverse()
+            
+        return path
+
+    def take_turn(self, player_grid_pos):
+        # Only take a turn if we are not already moving
+        if self.target_grid_pos is not None:
+            # Snap to grid if it hasn't finished its previous movement
+            self.pixel_pos = list(get_pixel_pos(self.target_grid_pos))
+            self.grid_pos = self.target_grid_pos
+            self.target_grid_pos = None
+
+        path = self.calculate_astar_path(player_grid_pos)
+        
+        # We only move if the path length is strictly greater than 1 
+        # (meaning we are not adjacent to the player)
+        if len(path) > 1:
+            self.target_grid_pos = path[0]
 
     def update(self, dt):
-        if not self.path and self.target_grid_pos:
-            self.target_grid_pos = None
-            self.animation_timer = 0.0
-            return
-
-        if self.path:
+        if self.target_grid_pos:
             self.animation_timer += dt
-            next_grid_pos = self.path[0]
-            target_x, target_y = get_pixel_pos(next_grid_pos)
+            target_x, target_y = get_pixel_pos(self.target_grid_pos)
 
             move_dist = self.speed * dt
             
@@ -120,43 +118,31 @@ class Player:
             if dist <= move_dist:
                 self.pixel_pos[0] = target_x
                 self.pixel_pos[1] = target_y
-                self.grid_pos = next_grid_pos
-                self.path.pop(0)
-                if self.on_step_callback:
-                    self.on_step_callback()
+                self.grid_pos = self.target_grid_pos
+                self.target_grid_pos = None
             else:
                 self.pixel_pos[0] += (dx / dist) * move_dist
                 self.pixel_pos[1] += (dy / dist) * move_dist
+        else:
+            self.animation_timer = 0.0
 
     def draw(self, surface, camera_x=0, camera_y=0):
-        if self.target_grid_pos:
-            tx, ty = get_pixel_pos(self.target_grid_pos)
-            target_rect = pygame.Rect(tx - camera_x, ty - camera_y, TILE_SIZE, TILE_SIZE)
-            pygame.draw.rect(surface, TARGET_COLOR, target_rect, 2)
-            
-            for p in self.path:
-                px, py = get_pixel_pos(p)
-                p_rect = pygame.Rect(px - camera_x + TILE_SIZE//2 - 2, py - camera_y + TILE_SIZE//2 - 2, 4, 4)
-                pygame.draw.rect(surface, TARGET_COLOR, p_rect)
-
-        if getattr(self, 'image', None):
+        if self.image:
             image_to_draw = self.image
-            if not getattr(self, 'facing_right', True):
+            if not self.facing_right:
                 image_to_draw = pygame.transform.flip(self.image, True, False)
                 
             center_x = self.pixel_pos[0] - camera_x + TILE_SIZE / 2
             center_y = self.pixel_pos[1] - camera_y + TILE_SIZE / 2
                 
-            if getattr(self, 'path', []):
-                anim_timer = getattr(self, 'animation_timer', 0)
-                bob_offset = abs(math.sin(anim_timer * 15)) * 8
+            if self.target_grid_pos:
+                bob_offset = abs(math.sin(self.animation_timer * 15)) * 8
                 center_y -= bob_offset
-                
-                swing_angle = math.sin(anim_timer * 15) * 5 # Swing up to 15 degrees
+                swing_angle = math.sin(self.animation_timer * 15) * 5
                 image_to_draw = pygame.transform.rotate(image_to_draw, swing_angle)
 
             draw_rect = image_to_draw.get_rect(center=(center_x, center_y))
             surface.blit(image_to_draw, draw_rect)
         else:
             player_rect = pygame.Rect(self.pixel_pos[0] - camera_x, self.pixel_pos[1] - camera_y, TILE_SIZE, TILE_SIZE)
-            pygame.draw.rect(surface, PLAYER_COLOR, player_rect)
+            pygame.draw.rect(surface, (200, 50, 200), player_rect)
