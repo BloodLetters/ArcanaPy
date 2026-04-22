@@ -43,6 +43,8 @@ class Canvas:
                     self._do_erase(event.pos)
                 elif tool == "FILL":
                     self._do_fill(event.pos)
+                elif tool == "SELECT":
+                    self._do_select(event.pos)
                 return True
 
             elif event.button == 3:
@@ -88,6 +90,20 @@ class Canvas:
                 self.is_hovered = False
 
         return False
+
+    def _do_select(self, pos):
+        col, row = self._mouse_to_grid(pos)
+        lm = self.editor.layer_manager
+        tile = lm.get_tile_at(col, row)
+        if tile is None:
+            all_tiles = lm.get_all_tiles_at(col, row)
+            if all_tiles:
+                li, ln, tile = all_tiles[-1]
+                self.editor.selected_tile = (col, row, li, tile)
+            else:
+                self.editor.selected_tile = (col, row, None, None)
+        else:
+            self.editor.selected_tile = (col, row, lm.active_index, tile)
 
     def _do_draw(self, pos):
         col, row = self._mouse_to_grid(pos)
@@ -205,7 +221,7 @@ class Canvas:
 
         self._draw_grid(surface, cam, col_start, col_end, row_start, row_end)
 
-        if self.is_hovered and self.editor.current_tool in ("DRAW", "ERASE", "FILL"):
+        if self.is_hovered and self.editor.current_tool in ("DRAW", "ERASE", "FILL", "SELECT"):
             mouse_pos = pygame.mouse.get_pos()
             col, row = self._mouse_to_grid(mouse_pos)
             sx, sy = cam.grid_to_screen(col, row, self.rect.x)
@@ -225,12 +241,43 @@ class Canvas:
                 pygame.draw.rect(surface, Colors.DANGER, preview_rect, width=2, border_radius=2)
             elif self.editor.current_tool == "FILL":
                 pygame.draw.rect(surface, Colors.INFO, preview_rect, width=2, border_radius=2)
+            elif self.editor.current_tool == "SELECT":
+                hover_s = pygame.Surface((ts, ts), pygame.SRCALPHA)
+                hover_s.fill((139, 107, 219, 40))
+                surface.blit(hover_s, preview_rect.topleft)
+                pygame.draw.rect(surface, Colors.ACCENT, preview_rect, width=1, border_radius=2)
+
+        if self.editor.selected_tile is not None:
+            sel_col, sel_row, _, _ = self.editor.selected_tile
+            sx, sy = cam.grid_to_screen(sel_col, sel_row, self.rect.x)
+            sel_rect = pygame.Rect(int(sx), int(sy), ts, ts)
+            glow = sel_rect.inflate(4, 4)
+            glow_s = pygame.Surface((glow.width, glow.height), pygame.SRCALPHA)
+            glow_s.fill((139, 107, 219, 60))
+            surface.blit(glow_s, glow.topleft)
+            pygame.draw.rect(surface, Colors.ACCENT, sel_rect, width=2, border_radius=2)
+            pygame.draw.rect(surface, (200, 180, 255), sel_rect, width=1, border_radius=2)
+            corner_size = max(4, ts // 6)
+            for cx, cy in [
+                (sel_rect.left, sel_rect.top),
+                (sel_rect.right - corner_size, sel_rect.top),
+                (sel_rect.left, sel_rect.bottom - corner_size),
+                (sel_rect.right - corner_size, sel_rect.bottom - corner_size),
+            ]:
+                pygame.draw.rect(surface, (200, 180, 255), (cx, cy, corner_size, corner_size), width=2)
 
         if self.is_hovered:
             mouse_pos = pygame.mouse.get_pos()
             col, row = self._mouse_to_grid(mouse_pos)
             coord_text = font_small().render(f"({col}, {row})", True, Colors.TEXT_MUTED)
             surface.blit(coord_text, (self.rect.x + 8, self.rect.bottom - 20))
+
+        if self.editor.selected_tile is not None:
+            sel_col, sel_row, _, _ = self.editor.selected_tile
+            sel_label = font_small().render(
+                f"Selected: ({sel_col}, {sel_row})", True, Colors.ACCENT
+            )
+            surface.blit(sel_label, (self.rect.x + 8, self.rect.bottom - 36))
 
         surface.set_clip(None)
 

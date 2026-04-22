@@ -175,16 +175,3 @@ class PropertiesPanel:
             else:
                 empty = font_body().render("(empty cell)", True, Colors.TEXT_MUTED)
                 surface.blit(empty, (x, info_y))
-
-        shortcut_y = self.rect.bottom - 80
-        Separator.draw(surface, x, shortcut_y, panel_w, "SHORTCUTS")
-        shortcut_y += 24
-        shortcuts = [
-            "B: Brush  E: Eraser  M: Move  F: Fill",
-            "W: Toggle Mode  1-4: Layers",
-            "F11: Fullscreen  Scroll: Zoom",
-        ]
-        for s in shortcuts:
-            surf = font_small().render(s, True, Colors.TEXT_MUTED)
-            surface.blit(surf, (x, shortcut_y))
-            shortcut_y += 16

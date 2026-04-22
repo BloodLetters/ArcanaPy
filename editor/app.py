@@ -1,4 +1,6 @@
 import sys
+import os
+import subprocess
 import pygame
 from core.settings import FPS, MAP_FILE, EDITOR_WIDTH, EDITOR_HEIGHT
 from editor.theme import Colors, Layout
@@ -8,6 +10,7 @@ from editor.toolbar import Toolbar
 from editor.asset_panel import AssetPanel
 from editor.properties_panel import PropertiesPanel
 from editor.canvas import Canvas
+from editor.script_panel import ScriptPanel
 
 
 class EditorApp:
@@ -36,6 +39,7 @@ class EditorApp:
         self.walkable_mode = False
         self.active_asset = None
         self.context_menu = None
+        self.selected_tile = None
 
         self.left_mouse_down = False
         self.middle_mouse_down = False
@@ -45,6 +49,7 @@ class EditorApp:
         self.asset_panel = AssetPanel(self)
         self.properties_panel = PropertiesPanel(self)
         self.canvas = Canvas(self)
+        self.script_panel = ScriptPanel(self)
 
         self.asset_panel.load_assets()
         all_assets = self.asset_panel.get_all_assets()
@@ -63,6 +68,14 @@ class EditorApp:
         self.properties_panel.recalculate(w, h)
         self.canvas.recalculate(w, h)
 
+        right_panel_h = h - Layout.TOOLBAR_HEIGHT
+        script_panel_y = Layout.TOOLBAR_HEIGHT + int(right_panel_h * 0.58)
+        self.script_panel.recalculate(
+            w - Layout.RIGHT_PANEL_WIDTH,
+            script_panel_y,
+            Layout.RIGHT_PANEL_WIDTH,
+        )
+
     def set_tool(self, tool_id):
         self.current_tool = tool_id
         self.toolbar.set_active_tool(tool_id)
@@ -78,6 +91,14 @@ class EditorApp:
 
     def clear_all(self):
         self.layer_manager.clear_all()
+
+    def play_game(self):
+        self.layer_manager.save(MAP_FILE)
+        project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        subprocess.Popen(
+            [sys.executable, os.path.join(project_root, "main.py")],
+            cwd=project_root,
+        )
 
     def zoom_in(self):
         cx = self.canvas.rect.centerx
@@ -119,6 +140,8 @@ class EditorApp:
                     continue
 
             if event.type == pygame.KEYDOWN:
+                if self.script_panel.handle_event(event):
+                    continue
                 self._handle_key(event)
                 continue
 
@@ -128,6 +151,7 @@ class EditorApp:
                     self.asset_panel.handle_event(event)
                 elif pos[0] > self.window_width - Layout.RIGHT_PANEL_WIDTH:
                     self.properties_panel.handle_event(event)
+                    self.script_panel.handle_event(event)
                 else:
                     self.canvas.handle_event(event)
             elif event.type == pygame.MOUSEWHEEL:
@@ -156,25 +180,32 @@ class EditorApp:
             self.set_tool("MOVE")
         elif event.key == pygame.K_f:
             self.set_tool("FILL")
+        elif event.key == pygame.K_s:
+            self.set_tool("SELECT")
         elif event.key == pygame.K_w:
             self.toggle_walkable()
-        elif event.key == pygame.K_s:
-            self.save_map()
         elif event.key == pygame.K_l:
             self.load_map()
         elif event.key == pygame.K_F11:
             self.toggle_fullscreen()
+        elif event.key == pygame.K_F5:
+            self.play_game()
         elif event.key == pygame.K_ESCAPE:
             if self.context_menu:
                 self.context_menu = None
+            elif self.selected_tile is not None:
+                self.selected_tile = None
         elif event.key in (pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4):
             idx = event.key - pygame.K_1
             if idx < len(self.layer_manager.layers):
                 self.layer_manager.set_active(idx)
 
     def update(self):
+        dt = 1 / FPS
         keys = pygame.key.get_pressed()
         self.camera.update_keys(keys)
+        self.script_panel.update(dt)
+        self.toolbar.update(dt)
 
     def draw(self):
         self.screen.fill(Colors.BG_DARK)
@@ -182,6 +213,7 @@ class EditorApp:
         self.canvas.draw(self.screen)
         self.asset_panel.draw(self.screen)
         self.properties_panel.draw(self.screen)
+        self.script_panel.draw(self.screen)
         self.toolbar.draw(self.screen)
 
         if self.context_menu:

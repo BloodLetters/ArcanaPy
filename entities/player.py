@@ -16,7 +16,7 @@ class Player:
         self.map_data = map_data
 
         try:
-            self.image = pygame.image.load("assets/player/player.png").convert_alpha()
+            self.image = pygame.image.load("assets/players/player.png").convert_alpha()
         except (pygame.error, FileNotFoundError):
             self.image = None
             print("Warning: assets/player/player.png not found, using fallback color.")

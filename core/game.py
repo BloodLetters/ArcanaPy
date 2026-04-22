@@ -36,6 +36,7 @@ class Game:
 
     def update(self, dt):
         self.player.update(dt)
+        self.map_data.script_runtime.update(dt)
 
     def draw(self):
         self.screen.fill(BG_COLOR)

@@ -1,5 +1,5 @@
-import pygame
 from editor.theme import Colors, Layout, Icons, font_section, font_body, font_small
+import pygame
 from editor.ui_components import IconButton, Separator
 
 
@@ -10,6 +10,7 @@ class Toolbar:
         self.tool_buttons = {}
         self.action_buttons = []
         self.zoom_buttons = []
+        self.play_btn = None
         self._build()
 
     def _build(self):
@@ -22,6 +23,7 @@ class Toolbar:
             ("ERASE", Icons.ERASER, "Eraser (E)"),
             ("MOVE", Icons.MOVE, "Move (M)"),
             ("FILL", Icons.FILL, "Fill (F)"),
+            ("SELECT", Icons.SELECT, "Select (S)"),
         ]
         for tool_id, icon, tooltip in tools:
             btn = IconButton(x, y, icon, tooltip, lambda t=tool_id: self.editor.set_tool(t))
@@ -31,6 +33,11 @@ class Toolbar:
 
         if "DRAW" in self.tool_buttons:
             self.tool_buttons["DRAW"].is_active = True
+        
+        # New base X for play button after the tools + separator
+        self.play_sep_x = x + 4
+        x += 16
+        self.play_btn = IconButton(x, y, Icons.PLAY, "Play Game (F5)", self.editor.play_game)
 
     def recalculate(self, window_width):
         self.rect.width = window_width
@@ -68,6 +75,8 @@ class Toolbar:
         for btn in self.tool_buttons.values():
             if btn.handle_event(event):
                 return True
+        if self.play_btn and self.play_btn.handle_event(event):
+            return True
         for btn in self.action_buttons:
             if btn.handle_event(event):
                 return True
@@ -76,6 +85,9 @@ class Toolbar:
                 return True
         return False
 
+    def update(self, dt):
+        pass
+
     def draw(self, surface):
         pygame.draw.rect(surface, Colors.PANEL_HEADER, self.rect)
         pygame.draw.line(surface, Colors.BORDER, (0, self.rect.bottom - 1),
@@ -83,8 +95,16 @@ class Toolbar:
 
         for btn in self.tool_buttons.values():
             btn.draw(surface)
+        
+        # Divider before Play button
+        pygame.draw.line(surface, Colors.BORDER,
+                         (self.play_sep_x, 8), (self.play_sep_x, Layout.TOOLBAR_HEIGHT - 8))
+        
+        if self.play_btn:
+            self.play_btn.draw(surface)
 
-        sep_x = 8 + len(self.tool_buttons) * (Layout.ICON_BUTTON_SIZE + 4) + 8
+        # Divider after Play button and tools
+        sep_x = self.play_btn.rect.right + 8
         pygame.draw.line(surface, Colors.BORDER,
                          (sep_x, 8), (sep_x, Layout.TOOLBAR_HEIGHT - 8))
 
@@ -111,3 +131,4 @@ class Toolbar:
             btn.draw(surface)
         for btn in self.zoom_buttons:
             btn.draw(surface)
+

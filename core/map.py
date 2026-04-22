@@ -8,14 +8,16 @@ import json
 import os
 from core.settings import TILE_SIZE, WALL_COLOR, MAP_WIDTH, WINDOW_HEIGHT, LEFT_UI_WIDTH
 from core.grid import get_pixel_pos
+from core.script_manager import ScriptRuntime
 
 
 class MapData:
     """Game-compatible map data. Loads layered or legacy formats into a flat tile dict."""
 
     def __init__(self):
-        self.tiles = {}  # {(col, row): {"asset": asset_path, "walkable": bool}}
+        self.tiles = {}  # {(col, row): {"asset": str, "walkable": bool, "scripts": list, "properties": dict}}
         self.image_cache = {}
+        self.script_runtime = ScriptRuntime()
 
     def get_image(self, asset_path):
         if asset_path not in self.image_cache:
@@ -28,10 +30,12 @@ class MapData:
                 self.image_cache[asset_path] = None
         return self.image_cache[asset_path]
 
-    def add_wall(self, col, row, asset_path=None, walkable=False):
+    def add_wall(self, col, row, asset_path=None, walkable=False, scripts=None, properties=None):
         self.tiles[(col, row)] = {
             "asset": asset_path if asset_path else "COLOR",
-            "walkable": walkable
+            "walkable": walkable,
+            "scripts": scripts or [],
+            "properties": properties or {},
         }
 
     def remove_wall(self, col, row):
@@ -91,7 +95,13 @@ class MapData:
                     continue
                 for t in layer_data.get("tiles", []):
                     walkable = t.get("walkable", False)
-                    self.tiles[(t['col'], t['row'])] = {"asset": t['asset'], "walkable": walkable}
+                    self.tiles[(t['col'], t['row'])] = {
+                        "asset": t['asset'],
+                        "walkable": walkable,
+                        "scripts": t.get("scripts", []),
+                        "properties": t.get("properties", {}),
+                    }
+            self.script_runtime.load_from_map(self.tiles)
             print(f"Layered map loaded from {filepath} (flattened for game)")
             return
 

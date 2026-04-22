@@ -117,7 +117,7 @@
         {
           "col": 15,
           "row": 12,
-          "asset": "assets/Tiles/FieldsTile_26.png",
+          "asset": "assets/players/player.png",
           "walkable": false
         },
         {
@@ -129,7 +129,7 @@
         {
           "col": 17,
           "row": 12,
-          "asset": "assets/Tiles/FieldsTile_26.png",
+          "asset": "assets/players/player.png",
           "walkable": false
         },
         {
@@ -243,7 +243,7 @@
         {
           "col": 17,
           "row": 13,
-          "asset": "assets/Tiles/FieldsTile_38.png",
+          "asset": "assets/players/player.png",
           "walkable": false
         },
         {
@@ -678,6 +678,18 @@
           "col": 3,
           "row": 6,
           "asset": "assets/Tiles/FieldsTile_53.png",
+          "walkable": false
+        },
+        {
+          "col": 15,
+          "row": 8,
+          "asset": "assets/players/player.png",
+          "walkable": false
+        },
+        {
+          "col": 16,
+          "row": 8,
+          "asset": "assets/players/player.png",
           "walkable": false
         }
       ]

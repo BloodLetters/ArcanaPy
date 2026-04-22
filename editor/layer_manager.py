@@ -20,8 +20,14 @@ class Layer:
     def color(self):
         return self.LAYER_COLORS.get(self.name, (120, 120, 140))
 
-    def set_tile(self, col, row, asset_path, walkable=False):
-        self.tiles[(col, row)] = {"asset": asset_path, "walkable": walkable}
+    def set_tile(self, col, row, asset_path, walkable=False, scripts=None, properties=None):
+        existing = self.tiles.get((col, row), {})
+        self.tiles[(col, row)] = {
+            "asset": asset_path,
+            "walkable": walkable,
+            "scripts": scripts if scripts is not None else existing.get("scripts", []),
+            "properties": properties if properties is not None else existing.get("properties", {}),
+        }
 
     def remove_tile(self, col, row):
         if (col, row) in self.tiles:
@@ -38,11 +44,16 @@ class Layer:
     def to_dict(self):
         tiles_list = []
         for (col, row), data in self.tiles.items():
-            tiles_list.append({
+            entry = {
                 "col": col, "row": row,
                 "asset": data["asset"],
-                "walkable": data["walkable"]
-            })
+                "walkable": data["walkable"],
+            }
+            if data.get("scripts"):
+                entry["scripts"] = data["scripts"]
+            if data.get("properties"):
+                entry["properties"] = data["properties"]
+            tiles_list.append(entry)
         return {
             "name": self.name,
             "visible": self.visible,
@@ -54,8 +65,12 @@ class Layer:
     def from_dict(cls, data):
         layer = cls(data["name"], data.get("visible", True), data.get("locked", False))
         for t in data.get("tiles", []):
-            walkable = t.get("walkable", False)
-            layer.tiles[(t["col"], t["row"])] = {"asset": t["asset"], "walkable": walkable}
+            layer.tiles[(t["col"], t["row"])] = {
+                "asset": t["asset"],
+                "walkable": t.get("walkable", False),
+                "scripts": t.get("scripts", []),
+                "properties": t.get("properties", {}),
+            }
         return layer
 
 

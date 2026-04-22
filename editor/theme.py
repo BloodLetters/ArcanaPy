@@ -58,6 +58,8 @@ class Icons:
     ERASER = "E"
     MOVE = "M"
     FILL = "F"
+    SELECT = "S"
+    PLAY = "P"
     SAVE = "S"
     LOAD = "L"
     CLEAR = "X"
@@ -102,3 +104,7 @@ def font_small():
 
 def font_icon():
     return get_font(16, bold=True)
+
+
+def font_huge():
+    return get_font(22, bold=True)
